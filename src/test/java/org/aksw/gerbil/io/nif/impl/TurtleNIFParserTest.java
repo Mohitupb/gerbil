@@ -29,11 +29,9 @@ import java.util.Map;
 import org.aksw.gerbil.io.nif.NIFParser;
 import org.aksw.gerbil.transfer.nif.Document;
 import org.aksw.gerbil.transfer.nif.Marking;
-import org.aksw.gerbil.transfer.nif.data.Annotation;
 import org.aksw.gerbil.transfer.nif.data.DocumentImpl;
 import org.aksw.gerbil.transfer.nif.data.NamedEntity;
 import org.aksw.gerbil.transfer.nif.data.TypedNamedEntity;
-import org.aksw.gerbil.transfer.nif.data.RelationImpl;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDFS;
@@ -255,85 +253,31 @@ public class TurtleNIFParserTest {
                                         		22,
                                         		new HashSet<String>(
                                                         Arrays.asList(
-                                                        		"http://dbpedia.org/resource/Bastian_Schweinsteiger",
-																"https://www.theguardian.com/football/2017/mar/21/bastian-schweinsteiger-chicago-fire-manchester-united/Bastian_Schweinsteiger")),
+                                                        		"http://dbpedia.org/resource/Bastian_Schweinsteiger"
+									)),
                                         		 new HashSet<String>(
                                                          Arrays.asList(
-                                                                 "http://www.w3.org/2002/07/owl#Individual",
-                                                                 "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Person"))),
+                                                                   "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Person"))),
                                         (Marking) new TypedNamedEntity(
                                                 29,
                                                 12,
                                                 new HashSet<String>(
-                                                        Arrays.asList("http://dbpedia.org/resource/Chicago_Fire_Soccer_Club",
-                                                                "https://www.theguardian.com/football/2017/mar/21/bastian-schweinsteiger-chicago-fire-manchester-united/Chicago_Fire_Soccer_Club")),
+                                                        Arrays.asList("http://dbpedia.org/resource/Chicago_Fire_Soccer_Club"
+                                                                )),
                                                 new HashSet<String>(
                                                         Arrays.asList(
-                                                                "http://www.w3.org/2002/07/owl#Individual",
-                                                                "http://ontologydesignpatterns.org/ont/wikipedia/d0.owl#Organization"))),
+                                                                "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Organization"))),
                                         (Marking) new TypedNamedEntity(
                                                 47,
                                                 17,
                                                 new HashSet<String>(
-                                                        Arrays.asList("http://dbpedia.org/resource/Manchester_United_F.C",
-                                                                "https://www.theguardian.com/football/2017/mar/21/bastian-schweinsteiger-chicago-fire-manchester-united/Manchester_United_F.C")),
+                                                        Arrays.asList("http://dbpedia.org/resource/Manchester_United_F.C"
+                                                                )),
                                                 new HashSet<String>(
                                                         Arrays.asList(
-                                                                "http://www.w3.org/2002/07/owl#Individual",
-                                                                "http://ontologydesignpatterns.org/ont/wikipedia/d0.owl#Organization"))),
+                                                                 "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Organization"))),
 																
-										(Marking) new RelationImpl(
-											new TypedNamedEntity(
-													0,
-	                                        		22,
-	                                        		new HashSet<String>(
-	                                                        Arrays.asList(
-	                                                        		"http://dbpedia.org/resource/Bastian_Schweinsteiger",
-																	"https://www.theguardian.com/football/2017/mar/21/bastian-schweinsteiger-chicago-fire-manchester-united/Bastian_Schweinsteiger")),
-	                                        		 new HashSet<String>(
-	                                                         Arrays.asList(
-	                                                                 "http://www.w3.org/2002/07/owl#Individual",
-	                                                                 "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Person"))),
-											
-											new Annotation("http://dbpedia.org/ontology/club"),
-											
-											new TypedNamedEntity(
-													29,
-													12,
-                                                new HashSet<String>(
-                                                        Arrays.asList("http://dbpedia.org/resource/Chicago_Fire_Soccer_Club",
-                                                                "https://www.theguardian.com/football/2017/mar/21/bastian-schweinsteiger-chicago-fire-manchester-united/Chicago_Fire_Soccer_Club")),
-                                                new HashSet<String>(
-                                                        Arrays.asList(
-                                                                "http://www.w3.org/2002/07/owl#Individual",
-                                                                "http://ontologydesignpatterns.org/ont/wikipedia/d0.owl#Organization")))),
-
-										(Marking) new RelationImpl(
-												new TypedNamedEntity(
-														0,
-		                                        		22,
-		                                        		new HashSet<String>(
-		                                                        Arrays.asList(
-		                                                        		"http://dbpedia.org/resource/Bastian_Schweinsteiger",
-																		"https://www.theguardian.com/football/2017/mar/21/bastian-schweinsteiger-chicago-fire-manchester-united/Bastian_Schweinsteiger")),
-		                                        		 new HashSet<String>(
-		                                                         Arrays.asList(
-		                                                                 "http://www.w3.org/2002/07/owl#Individual",
-		                                                                 "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Person"))),
-									
-											new Annotation("http://dbpedia.org/ontology/formerTeam"),
-									
-											new TypedNamedEntity(
-	                                                47,
-	                                                17,
-	                                                new HashSet<String>(
-	                                                        Arrays.asList("http://dbpedia.org/resource/Manchester_United_F.C",
-	                                                                "https://www.theguardian.com/football/2017/mar/21/bastian-schweinsteiger-chicago-fire-manchester-united/Manchester_United_F.C")),
-	                                                new HashSet<String>(
-	                                                        Arrays.asList(
-	                                                                "http://www.w3.org/2002/07/owl#Individual",
-	                                                                "http://ontologydesignpatterns.org/ont/wikipedia/d0.owl#Organization"))))
-																))}});
+									))}});
                                                         		
         return testConfigs;
     }
