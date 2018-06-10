@@ -275,7 +275,7 @@ public class TurtleNIFParserTest {
                                                                 )),
                                                 new HashSet<String>(
                                                         Arrays.asList(
-                                                                 "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Organization"))),
+                                                                 "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Organization")))
 																
 									))}});
                                                         		
