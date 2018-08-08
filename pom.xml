@@ -64,12 +64,7 @@
 			<artifactId>jena-arq</artifactId>
 			<version>${jena.version}</version>
 		</dependency>
-		<!-- Embedded Fuseki server -->
-		<dependency>
-  			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-fuseki-embedded</artifactId>
-			<version>3.8.0</version>
-		</dependency>
+
 
 		<!-- Google Guava -->
 		<dependency>
