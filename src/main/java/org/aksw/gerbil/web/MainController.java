@@ -54,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.aksw.gerbil.database.NewExperimentDAO;
 
 import com.google.common.collect.Lists;
 
@@ -77,7 +78,8 @@ public class MainController {
         // Simply call the dataset mapping so that it has to be instantiated
         // DatasetMapping.getDatasetsForExperimentType(ExperimentType.EExt);
     }
-
+    
+   
     @PostConstruct
     public void init() {
         initialize(dao);
@@ -86,6 +88,11 @@ public class MainController {
     @Autowired
     @Qualifier("experimentDAO")
     private ExperimentDAO dao;
+    
+    
+    @Autowired
+    @Qualifier("nexperimentDAO")
+    private NewExperimentDAO ndao;
 
     @Autowired
     private Overseer overseer;
