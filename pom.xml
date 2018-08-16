@@ -64,10 +64,12 @@
 			<artifactId>jena-arq</artifactId>
 			<version>${jena.version}</version>
 		</dependency>
+			<!-- jena-fuseki -->
 		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-tdb</artifactId>
-			<version>${jena.version}</version>
+		    <groupId>org.apache.jena</groupId>
+		    <artifactId>jena-fuseki-embedded</artifactId>
+		    <version>3.8.0</version>
+		    <scope>provided</scope>
 		</dependency>
 		
 		
@@ -321,7 +323,7 @@
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
 			<version>1.6</version>
-		</dependency>
+		</dependency>	
 	</dependencies>
 
 	<build>

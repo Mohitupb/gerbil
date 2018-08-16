@@ -39,6 +39,9 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
+import org.apache.jena.fuseki.embedded.FusekiServer;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetGraphFactory;
 
 public class DataIDGenerator {
 
@@ -53,7 +56,13 @@ public class DataIDGenerator {
     public DataIDGenerator(String gerbilURL) {
         this.gerbilURL = gerbilURL;
     }
-
+    // Starting the Embedded Fuseki server 
+    public void Fusekiserver() {
+        DatasetGraph dsg = DatasetGraphFactory.createTxnMem() ;
+        FusekiServer server = FusekiServer.create().add("/ds", dsg).build() ;
+        server.start() ;
+    
+}	
     public Model generateDataIDModel() {
         // create an empty JENA Model
         Model model = ModelFactory.createDefaultModel();
