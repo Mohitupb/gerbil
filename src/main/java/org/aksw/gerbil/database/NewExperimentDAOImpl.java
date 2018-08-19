@@ -66,6 +66,12 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	        
 	 }
 	 
+	 private void connectToExperiment(Model model,Resource experiment, Resource experimentTask) {
+	    	model.add(experiment,GERBIL.Experiment,experiment);
+	        model.add(experiment,GERBIL.ExperimentTask,experimentTask);
+	        this.template.update(CONNECT_TASK_EXPERIMENT, parameters);
+	    }
+	 
 	}
 
 	    
