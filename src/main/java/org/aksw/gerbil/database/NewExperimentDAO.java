@@ -125,7 +125,7 @@ public interface NewExperimentDAO extends Closeable {
      *            the id of the experiment
      * @return the id of the newly created experiment task.
      */
-    public void createExperimentTask(Model model, Resource annotatorName, Resource datasetName, Resource experimentType, Resource matching,
+    public Resource createExperimentTask(Model model, Resource annotatorName, Resource datasetName, Resource experimentType, Resource matching,
             Resource experiment);
 
     /**
