@@ -72,7 +72,7 @@ public interface NewExperimentDAO extends Closeable {
      *            the id of the experiment task
      * @return the experiment task or null if this task does not exist.
      */
-    public ExperimentTaskResult getResultOfExperimentTask(Model model, Resource experimentTaskId);
+    public ExperimentTaskResult getResultOfExperimentTask(Model model, Resource experimentTask);
 
     /**
      * This method is called with the description of an experiment task and an
@@ -105,7 +105,7 @@ public interface NewExperimentDAO extends Closeable {
      *         newly created experiment task.
      */
     public Resource connectCachedResultOrCreateTask(Model model, Resource annotatorName, Resource datasetName, Resource experimentType,
-            Resource matching, Resource experimentId);
+            Resource matching, Resource experiment);
 
     /**
      * Creates a new experiment task with the given preferences, sets its GERBIL
@@ -125,8 +125,8 @@ public interface NewExperimentDAO extends Closeable {
      *            the id of the experiment
      * @return the id of the newly created experiment task.
      */
-    public void createExperimentTask(Model model, ExperimentTaskResult result, Resource superExpTask,
-            List<Resource> experimentTasks);
+    public void createExperimentTask(Model model, Resource annotatorName, Resource datasetName, Resource experimentType, Resource matching,
+            Resource experiment);
 
     /**
      * This method updates the result of the already existing experiment task,
@@ -140,7 +140,7 @@ public interface NewExperimentDAO extends Closeable {
      * @param result
      *            the result of this experiment task
      */
-    public void setExperimentTaskResult(Model model, Resource experimentTaskId, ExperimentTaskResult result);
+    public void setExperimentTaskResult(Model model, Resource experimentTask, ExperimentTaskResult result);
 
     /**
      * Sets the state of the already existing experiment task, identified by the
@@ -152,7 +152,7 @@ public interface NewExperimentDAO extends Closeable {
      * @param state
      *            the state of this experiment task
      */
-    public void setExperimentState(Model model, Resource experimentTaskId, int state);
+    public void setExperimentState(Model model, Resource experimentTask, int state);
 
     /**
      * Returns the state of the existing experiment task, identified by the
@@ -164,7 +164,7 @@ public interface NewExperimentDAO extends Closeable {
      * @return the state of the experiment task or {@link #TASK_NOT_FOUND}=
      *         {@value #TASK_NOT_FOUND} if such a task couldn't be found.
      */
-    public Resource getExperimentState(Model model, Resource experimentTaskId);
+    public Resource getExperimentState(Model model, Resource experimentTask);
 
     /**
      * Returns the highest experiment ID that is known by the system or null if
