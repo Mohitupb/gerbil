@@ -48,6 +48,24 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	        return result;
 	    }
 	 
+	 public void createTask(Model model, Resource annotatorName, Resource datasetName, Resource experimentType, Resource matching,
+	            Resource experiment) {
+		    model.add(experiment,GERBIL.annotator,annotatorName);
+	        model.add(experiment,GERBIL.dataset,datasetName);
+	        model.add(experiment,GERBIL.experimentType,experimentType);
+	       	model.add(experiment,GERBIL.matching,matching);
+	        model.add(experiment,GERBIL.statusCode, NewExperimentDAO.TASK_STARTED_BUT_NOT_FINISHED_YET);
+	        Calendar cal = Calendar.getInstance();
+	        model.add(experiment, GERBIL.timestamp, model.createTypedLiteral(cal));
+	       
+	        this.template.update(INSERT_TASK, model);
+	        
+	        if (experiment != null) {
+	            connectToExperiment(model,experiment,experimentTask);
+	        }
+	        
+	 }
+	 
 	}
 
 	    
