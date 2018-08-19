@@ -31,16 +31,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.aksw.gerbil.dataid.DataIDGenerator;
 
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.update.UpdateFactory;
 
 public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(NewExperimentDAOImpl.class);
+	
+	
 
 	
 	 public List<ExperimentTaskResult> getResultsOfExperiment(Model model,Resource experiment) {
 	    	       
 	        model.add(experiment,GERBIL.Experiment , experiment);
-	         List<ExperimentTaskResult> result = this.template.query(GET_EXPERIMENT_RESULTS, parameters);
+	        Query query = QueryFactory.create(GET_EXPERIMENT_RESULTS); 
+	        QueryExecution qExe = QueryExecutionFactory.create(query, model);
+	         List<ExperimentTaskResult> result = qExe.execSelect();
 	             for (ExperimentTaskResult e : result) {
 	            addAdditionalResults(e);
 	            addSubTasks(e);
@@ -100,6 +107,21 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
              }
          }
 	    }
+	 
+	 protected void addAdditionaResult(Resource experimentTask, int resultId, double value) {
+   	  model.add(experimentTask, GERBIL.Experiment, experimentTask);
+         model.add("resultId", resultId);
+         model.add("value", value);
+         this.template.update(INSERT_ADDITIONAL_RESULT, parameters);
+   }
+
+   public void setExperimentState(Model model, Resource experimentTask, int state) {
+       model.add(experimentTask, GERBIL.Experiment, experimentTask);
+       model.add(experimentTask,GERBIL.statusCode,state);
+       Calendar cal = Calendar.getInstance();
+       model.add(experimentTask, GERBIL.timestamp, model.createTypedLiteral(cal));
+       this.template.update(SET_TASK_STATE, parameters);
+   }
 	 
 	}
 
