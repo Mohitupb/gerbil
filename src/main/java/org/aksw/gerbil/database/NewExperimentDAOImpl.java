@@ -31,23 +31,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.aksw.gerbil.dataid.DataIDGenerator;
 
+import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.update.UpdateFactory;
+
 
 public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(NewExperimentDAOImpl.class);
 	
-	
-
-	
+		
 	 public List<ExperimentTaskResult> getResultsOfExperiment(Model model,Resource experiment) {
 	    	       
 	        model.add(experiment,GERBIL.Experiment , experiment);
 	        Query query = QueryFactory.create(GET_EXPERIMENT_RESULTS); 
-	        QueryExecution qExe = QueryExecutionFactory.create(query, model);
-	         List<ExperimentTaskResult> result = qExe.execSelect();
+	       ResultSet qExe = (ResultSet) QueryExecutionFactory.create(query, model).execSelect();
+	         List<ExperimentTaskResult> result = ResultSetFormatter.outputAsJson(qExe);
 	             for (ExperimentTaskResult e : result) {
 	            addAdditionalResults(e);
 	            addSubTasks(e);
@@ -65,7 +67,7 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	        Calendar cal = Calendar.getInstance();
 	        model.add(experiment, GERBIL.timestamp, model.createTypedLiteral(cal));
 	       
-	        this.template.update(INSERT_TASK, model);
+	        this.template.update(INSERT_TASK, params, keyHolder);
 	        
 	        if (experiment != null) {
 	            connectToExperiment(model,experiment,experimentTask);
@@ -121,6 +123,19 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
        Calendar cal = Calendar.getInstance();
        model.add(experimentTask, GERBIL.timestamp, model.createTypedLiteral(cal));
        this.template.update(SET_TASK_STATE, parameters);
+   }
+   
+   public Resource getExperimentState(Model model, Resource experimentTask) {
+       
+       model.add(experimentTask,GERBIL.ExperimentTask, experimentTask);
+		Query query = QueryFactory.create(GET_TASK_STATE); 
+		QueryExecution qExe = QueryExecutionFactory.create(query, model);
+       List<Integer> result = this.template.query(GET_TASK_STATE, parameters, new IntegerRowMapper());
+       if (result.size() > 0) {
+           return result.get(0);
+       } else {
+           return TASK_NOT_FOUND;
+       }
    }
 	 
 	}
