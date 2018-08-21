@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.aksw.gerbil.database.NewExperimentDAO;
+
 
 import com.google.common.collect.Lists;
 
@@ -90,11 +90,7 @@ public class MainController {
     private ExperimentDAO dao;
     
     
-    @Autowired
-    @Qualifier("nexperimentDAO")
-    private NewExperimentDAO ndao;
-
-    @Autowired
+      @Autowired
     private Overseer overseer;
 
     @Autowired
