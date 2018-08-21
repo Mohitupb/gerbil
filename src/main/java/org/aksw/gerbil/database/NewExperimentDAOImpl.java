@@ -137,6 +137,24 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
            return TASK_NOT_FOUND;
        }
    }
+   
+
+   protected Resource getCachedExperimentTaskId(Model model, Resource annotatorName, Resource datasetName, Resource experimentType,
+           Resource matching,Resource experiment) {
+   	 model.add(experiment,GERBIL.annotator,annotatorName);
+	        model.add(experiment,GERBIL.dataset,datasetName);
+	        model.add(experiment,GERBIL.experimentType,experimentType);
+	       	model.add(experiment,GERBIL.matching,matching);
+	       	Calendar cal = Calendar.getInstance();
+	        model.add(experimentTask, GERBIL.timestamp, model.createTypedLiteral(cal));
+       model.add(experimentTask, GERBIL.statusCode, ErrorTypes.HIGHEST_ERROR_CODE);
+       List<Integer> result = this.template.query(GET_CACHED_TASK, params, new IntegerRowMapper());
+       if (result.size() > 0) {
+           return result.get(0);
+       } else {
+           return EXPERIMENT_TASK_NOT_CACHED;
+       }
+   }
 	 
 	}
 
