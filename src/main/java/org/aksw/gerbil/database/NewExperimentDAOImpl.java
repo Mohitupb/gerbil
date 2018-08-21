@@ -166,6 +166,9 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
        }
    }
 	 
+   protected void connectExistingTaskWithExperiment(Model model, Resource experimentTask, Resource experiment) {
+       connectToExperiment(model, experimentTask, experiment);
+   }
 	}
 
 	    
