@@ -169,6 +169,21 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
    protected void connectExistingTaskWithExperiment(Model model, Resource experimentTask, Resource experiment) {
        connectToExperiment(model, experimentTask, experiment);
    }
+   
+   protected void setRunningExperimentsToError(Model model, Resource experiment) {
+       
+       model.add(experiment, GERBIL.statusCode, NewExperimentDAO.TASK_STARTED_BUT_NOT_FINISHED_YET);
+       model.add(experiment"state", ErrorTypes.SERVER_STOPPED_WHILE_PROCESSING.getErrorCode());
+       Calendar cal = Calendar.getInstance();
+       model.add(experimentTask, GERBIL.timestamp, model.createTypedLiteral(cal));
+       this.template.update(SET_UNFINISHED_TASK_STATE, parameters);
+   }
+   
+   public List<ExperimentTaskResult> getAllRunningExperimentTasks() {
+       MapSqlParameterSource params = new MapSqlParameterSource();
+       params.addValue("unfinishedState", TASK_STARTED_BUT_NOT_FINISHED_YET);
+       return this.template.query(GET_RUNNING_EXPERIMENT_TASKS, params, new ExperimentTaskResultRowMapper());
+   }
 	}
 
 	    
