@@ -67,7 +67,7 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	        Calendar cal = Calendar.getInstance();
 	        model.add(experiment, GERBIL.timestamp, model.createTypedLiteral(cal));
 	       
-	        this.template.update(INSERT_TASK, params, keyHolder);
+	        this.template.update(INSERT_TASK,model);
 	        
 	        if (experiment != null) {
 	            connectToExperiment(model,experiment,experimentTask);
@@ -78,7 +78,7 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	 private void connectToExperiment(Model model,Resource experiment, Resource experimentTask) {
 	    	model.add(experiment,GERBIL.Experiment,experiment);
 	        model.add(experiment,GERBIL.ExperimentTask,experimentTask);
-	        this.template.update(CONNECT_TASK_EXPERIMENT, parameters);
+	        this.template.update(CONNECT_TASK_EXPERIMENT, model);
 	    }
 	 
 	 public void setExperimentTaskResult(Model model,Resource experimentTask, ExperimentTaskResult result) {
@@ -114,7 +114,7 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
    	  model.add(experimentTask, GERBIL.Experiment, experimentTask);
          model.add("resultId", resultId);
          model.add("value", value);
-         this.template.update(INSERT_ADDITIONAL_RESULT, parameters);
+         this.template.update(INSERT_ADDITIONAL_RESULT, model);
    }
 
    public void setExperimentState(Model model, Resource experimentTask, int state) {
@@ -122,7 +122,7 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
        model.add(experimentTask,GERBIL.statusCode,state);
        Calendar cal = Calendar.getInstance();
        model.add(experimentTask, GERBIL.timestamp, model.createTypedLiteral(cal));
-       this.template.update(SET_TASK_STATE, parameters);
+       this.template.update(SET_TASK_STATE, model);
    }
    
    public Resource getExperimentState(Model model, Resource experimentTask) {
@@ -130,7 +130,7 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
        model.add(experimentTask,GERBIL.ExperimentTask, experimentTask);
 		Query query = QueryFactory.create(GET_TASK_STATE); 
 		QueryExecution qExe = QueryExecutionFactory.create(query, model);
-       List<Integer> result = this.template.query(GET_TASK_STATE, parameters, new IntegerRowMapper());
+       List<Integer> result = this.template.query(GET_TASK_STATE,model);
        if (result.size() > 0) {
            return result.get(0);
        } else {
@@ -148,7 +148,7 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	       	Calendar cal = Calendar.getInstance();
 	        model.add(experimentTask, GERBIL.timestamp, model.createTypedLiteral(cal));
        model.add(experimentTask, GERBIL.statusCode, ErrorTypes.HIGHEST_ERROR_CODE);
-       List<Integer> result = this.template.query(GET_CACHED_TASK, params, new IntegerRowMapper());
+       List<Integer> result = this.template.query(GET_CACHED_TASK,model);
        if (result.size() > 0) {
            return result.get(0);
        } else {
@@ -176,13 +176,26 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
        model.add(experiment"state", ErrorTypes.SERVER_STOPPED_WHILE_PROCESSING.getErrorCode());
        Calendar cal = Calendar.getInstance();
        model.add(experimentTask, GERBIL.timestamp, model.createTypedLiteral(cal));
-       this.template.update(SET_UNFINISHED_TASK_STATE, parameters);
+       this.template.update(SET_UNFINISHED_TASK_STATE,model);
    }
    
    public List<ExperimentTaskResult> getAllRunningExperimentTasks() {
        MapSqlParameterSource params = new MapSqlParameterSource();
        params.addValue("unfinishedState", TASK_STARTED_BUT_NOT_FINISHED_YET);
-       return this.template.query(GET_RUNNING_EXPERIMENT_TASKS, params, new ExperimentTaskResultRowMapper());
+       return this.template.query(GET_RUNNING_EXPERIMENT_TASKS,model);
+   }
+   
+   public List<ExperimentTaskResult> getLatestResultsOfExperiments(Model model, Resource experimentType, Resource matching) {
+       Resource experimentTask;
+       model.add(experimentTask,GERBIL.experimentType,experimentType);
+       model.add(experimentTask,GERBIL.matching,matching);
+       model.add("unfinishedState", TASK_STARTED_BUT_NOT_FINISHED_YET);
+       List<ExperimentTaskResult> results = this.template.query(GET_LATEST_EXPERIMENT_TASK_RESULTS,model);
+
+       for (ExperimentTaskResult result : results) {
+           addAdditionalResults(result);
+       }
+       return results;
    }
 	}
 
