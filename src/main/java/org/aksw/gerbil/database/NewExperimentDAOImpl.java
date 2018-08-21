@@ -197,6 +197,22 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
        }
        return results;
    }
+   
+   public List<ExperimentTaskResult> getLatestResultsOfExperiments(Model model, Resource experimentType, Resource matching,
+           Resource annotatorNames[], Resource datasetNames[]) {
+			Resource experimentTask;
+       model.add(experimentTask,GERBIL.experimentType,experimentType);
+       model.add(experimentTask,GERBIL.matching,matching);
+       model.add("unfinishedState", TASK_STARTED_BUT_NOT_FINISHED_YET);
+       model.add(experimentTask,GERBIL.annotatorName, Arrays.asList(annotatorNames));
+       model.add(experimentTask,GERBIL.datasetNames, Arrays.asList(datasetNames));
+       List<ExperimentTaskResult> results = this.template.query(GET_LATEST_EXPERIMENT_TASK_RESULTS, model);
+
+       for (ExperimentTaskResult result : results) {
+           addAdditionalResults(result);
+       }
+       return results;
+   }
 	}
 
 	    
