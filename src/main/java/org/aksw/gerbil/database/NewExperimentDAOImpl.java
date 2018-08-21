@@ -155,6 +155,16 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
            return EXPERIMENT_TASK_NOT_CACHED;
        }
    }
+   
+      
+   public String getHighestExperimentId() {
+       List<String> result = this.template.query(GET_HIGHEST_EXPERIMENT_ID, new StringRowMapper());
+       if (result.size() > 0) {
+           return result.get(0);
+       } else {
+           return null;
+       }
+   }
 	 
 	}
 
