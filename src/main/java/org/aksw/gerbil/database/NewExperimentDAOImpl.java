@@ -39,9 +39,17 @@ import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 
 
-public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
+public class NewExperimentDAOImpl extends AbstractExperimentDAO {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(NewExperimentDAOImpl.class);
+	
+	@prefix gerbil: <http://w3id.org/gerbil/vocab#> ;
+	
+	private final static String GET_SUB_TASK_RESULTS = "SELECT ?annotatorName ?datasetName ?experimentType ?matching ?microF1 ?microPrecision ?microRecall ?macroF1 ?macroPrecision ?macroRecall ?statusCode ?errorCount ?subExperimentof WHERE {?experiments gerbi:experimentTask ?experimentTask ?experiment gerbil:subExperimentof ?subExperiment}";
+	private final static String GET_RUNNING_EXPERIMENT_TASKS = "SELECT ?annotatorName ?datasetName ?experimentType ?matching ?microF1 ?microPrecision ?microRecall ?macroF1 ?macroPrecision ?macroRecall ?statusCode ?errorCount WHERE {?ExperimentTasks gerbil:state "unfinishedState"}";
+	private final static String GET_ADDITIONAL_RESULTS =  "SELECT ?version WHERE {?experiment gerbil:version ?version }";
+	private final static String GET_HIGHEST_EXPERIMENT_ID = "SELECT ?experiment ORDER BY DESC(?experiment) LIMIT 1";
+	private final static String GET_TASK_STATE = "SELECT ?state WHERE { ?experiment gerbil:experimentTask ?experimentTask . }";
 	
 		
 	 public List<ExperimentTaskResult> getResultsOfExperiment(Model model,Resource experiment) {
@@ -78,7 +86,9 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	 private void connectToExperiment(Model model,Resource experiment, Resource experimentTask) {
 	    	model.add(experiment,GERBIL.Experiment,experiment);
 	        model.add(experiment,GERBIL.ExperimentTask,experimentTask);
-	        this.template.update(CONNECT_TASK_EXPERIMENT, model);
+	        Query query = QueryFactory.create(CONNECT_TASK_EXPERIMENT)); 
+	        QueryExecution qExe = QueryExecutionFactory.create(query, model);
+	        
 	    }
 	 
 	 public void setExperimentTaskResult(Model model,Resource experimentTask, ExperimentTaskResult result) {
@@ -130,8 +140,11 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
        model.add(experimentTask,GERBIL.ExperimentTask, experimentTask);
 		Query query = QueryFactory.create(GET_TASK_STATE); 
 		QueryExecution qExe = QueryExecutionFactory.create(query, model);
-       List<Integer> result = this.template.query(GET_TASK_STATE,model);
-       if (result.size() > 0) {
+		Query query = QueryFactory.create(GET_TASK_STATE); 
+		QueryExecution qExe = QueryExecutionFactory.create(query, model);
+		ResultSet resultsRes = qExe.execSelect();
+		
+       if (resultsRes.size() > 0) {
            return result.get(0);
        } else {
            return TASK_NOT_FOUND;
@@ -158,7 +171,10 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
    
       
    public String getHighestExperimentId() {
-       List<String> result = this.template.query(GET_HIGHEST_EXPERIMENT_ID, new StringRowMapper());
+	   Query query = QueryFactory.create(s2); 
+	   QueryExecution qExe = QueryExecutionFactory.create(query, model);
+	   ResultSet resultsRes = qExe.execSelect();
+	  // List<String> result = this.template.query(GET_HIGHEST_EXPERIMENT_ID, new StringRowMapper());
        if (result.size() > 0) {
            return result.get(0);
        } else {
@@ -182,7 +198,9 @@ public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
    public List<ExperimentTaskResult> getAllRunningExperimentTasks() {
        MapSqlParameterSource params = new MapSqlParameterSource();
        params.addValue("unfinishedState", TASK_STARTED_BUT_NOT_FINISHED_YET);
-       return this.template.query(GET_RUNNING_EXPERIMENT_TASKS,model);
+       Query query = QueryFactory.create(GET_RUNNING_EXPERIMENT_TASKS); 
+       QueryExecution qExe = QueryExecutionFactory.create(query, model);
+       
    }
    
    public List<ExperimentTaskResult> getLatestResultsOfExperiments(Model model, Resource experimentType, Resource matching) {
