@@ -38,8 +38,9 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 
+/* SPARQL database based implementaion of the {@link NewAbstractExperimentDAO} cass */
 
-public class NewExperimentDAOImpl extends AbstractExperimentDAO {
+public class NewExperimentDAOImpl extends NewAbstractExperimentDAO {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(NewExperimentDAOImpl.class);
 	
