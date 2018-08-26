@@ -15,6 +15,15 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 
+/**
+ * Abstract class implementing the general behavior of an {@link NewExperimentDAO}.
+ * Note that it is strongly recommended to extend this class instead of
+ * implementing the {@link NewExperimentDAO} class directly since this class
+ * already takes care of the synchronization problem of the
+ * {@link NewExperimentDAO#connectCachedResultOrCreateTask(Model, Resource, Resource, Resource, Resource)} method.
+ 
+ **/
+
 public abstract class NewAbstractExperimentDAO implements NewExperimentDAO {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(NewExperimentDAOImpl.class);
